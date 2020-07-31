@@ -13,6 +13,7 @@ render = web.template.render(settings.TEMPLATE_DIR,
                              base=settings.BASE_TEMPLATE)
 app = web.application(settings.URLS, globals())
 db = models.DB(settings.DATABASES)
+MY_DOMAIN = "https://3sd.me"
 
 
 class Index(object):
@@ -92,7 +93,7 @@ class Shorten(object):
 
         url = self.add_scheme(url)
         if debug:
-            print repr(url)
+            print(repr(url))
 
         # 判断是否已存在相应的数据
         exists = self.db.exist_expand(url)
@@ -100,7 +101,7 @@ class Shorten(object):
             shorten = exists.shorten
         else:
             shorten = self.db.add_url(url).shorten
-        shorten = web.ctx.homedomain + '/' + shorten
+        shorten = MY_DOMAIN + '/' + shorten
 
         if get_json:
             # 返回 json 格式的数据
@@ -130,15 +131,15 @@ class Expand(object):
 
         expand = self.get_expand(shorten)
         if debug:
-            print repr(expand)
+            print(repr(expand))
         if expand:
             return web.redirect(expand)  # 301 跳转
         else:
-            return web.index()
+            return render.index()
 
     def POST(self):
         """解析短网址，返回 json 数据"""
-        shorten = web.input(shorten='').shorten.encode('utf8').strip()
+        shorten = web.input(shorten='').shorten.strip()
         web.header('Content-Type', 'application/json')
 
         # 判断是否为有效短网址字符串
@@ -146,7 +147,7 @@ class Expand(object):
             expand = self.get_expand(shorten)
 
             if debug:
-                print repr(expand)
+                print(repr(expand))
             if expand:
                 shorten = web.ctx.homedomain + '/' + shorten
                 return json.dumps({'shorten': shorten, 'expand': expand})

@@ -32,10 +32,10 @@ Sample Usage:
 
 >>> import short_url
 >>> url = short_url.encode_url(12)
->>> print url
+>>> print(url)
 LhKA
 >>> key = short_url.decode_url(url)
->>> print key
+>>> print(key)
 12
 
 Use the functions in the top-level of the module to use the default encoder. 
@@ -57,7 +57,7 @@ class UrlEncoder(object):
         self.alphabet = alphabet
         self.block_size = block_size
         self.mask = (1 << block_size) - 1
-        self.mapping = range(block_size)
+        self.mapping = list(range(block_size))
         self.mapping.reverse()
     def encode_url(self, n, min_length=MIN_LENGTH):
         return self.enbase(self.encode(n), min_length)
@@ -87,7 +87,7 @@ class UrlEncoder(object):
         n = len(self.alphabet)
         if x < n:
             return self.alphabet[x]
-        return self._enbase(x / n) + self.alphabet[x % n]
+        return self._enbase(x // n) + self.alphabet[x % n]
     def debase(self, x):
         n = len(self.alphabet)
         result = 0
@@ -124,4 +124,4 @@ if __name__ == '__main__':
         assert a == e
         assert b == d
         c = (' ' * (7 - len(c))) + c
-        print '%6d %12d %s %12d %6d' % (a, b, c, d, e)
+        print('%6d %12d %s %12d %6d' % (a, b, c, d, e))

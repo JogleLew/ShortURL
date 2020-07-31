@@ -1,6 +1,6 @@
 # shorturl
 
-A URL shortener site powered by Python and web.py.
+A URL shortener site powered by Python3 and web.py.
 
 ## Features
 
